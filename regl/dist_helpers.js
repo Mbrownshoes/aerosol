@@ -20,21 +20,24 @@ function loadData() {
                 }
             }, args[1])
         };
-        d3.queue().defer(aerosolCsv, "week41-44.csv").await(function(err, aerosolData) {
-        	console.log(aerosolData)
-        	// var times = _.uniq(_.flatten(aerosolData.map(d => d3.keys(d.date)))).sort()
-            
-            if (err) {
-                console.error("Something went wrong loading data", err);
-                reject(err);
-                return
-            }
-            resolve({
-                aerosolData: aerosolData,
-                // aerosolData1: aerosolData1
-                // imgData: processImageData(imgData, width, height)
+        d3.queue().defer(aerosolCsv, "week-41-44.csv")
+            .defer(coordsRaw, "coordinates.csv")
+            .await(function(err, aerosolData,coordsRaw) {
+            	console.log(coordsRaw)
+            	// var times = _.uniq(_.flatten(aerosolData.map(d => d3.keys(d.date)))).sort()
+                
+                if (err) {
+                    console.error("Something went wrong loading data", err);
+                    reject(err);
+                    return
+                }
+                resolve({
+                    aerosolData: aerosolData,
+
+                    // aerosolData1: aerosolData1
+                    // imgData: processImageData(imgData, width, height)
+                })
             })
-        })
     })
 
     

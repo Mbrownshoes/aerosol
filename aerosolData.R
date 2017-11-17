@@ -52,12 +52,21 @@ for(i in 41:44){
   cropbox2 <- c(60,95,9,39)
   mapcrop2 <- crop(map, cropbox2)
   mapPoints = as.data.frame(rasterToPoints(mapcrop2))
-  mapPoints <- mutate(mapPoints,week=i)
+  # mapPoints <- mutate(mapPoints,week=i)
   colnames(mapPoints)[3] <- 'aer'
-  write.csv(mapPoints, file=paste0("regl/week",i,".csv"), row.names=F)
+  
+  #order points by x and y
+  m<-mapPoints[order(mapPoints$x,mapPoints$y),]
+ 
+  #get lat long
+  coords<-dplyr::select(mapPoints,x,y)
+  #points
+  mapPoints<-dplyr::select(mapPoints,aer)
+  if(j==1){
+    write.csv(coords, file=paste0("regl/coordinates",".csv"), row.names=F)
+  }
+  write.csv(mapPoints, file=paste0("regl/week-",i,".csv"), row.names=F)
   datalist[[j]] <- mapPoints
-  
-  
 }
 x <- bind_rows(datalist)
 write.csv(x, file=paste0("regl/week41-44",".csv"), row.names=F)
