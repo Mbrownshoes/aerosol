@@ -133,28 +133,27 @@ function makeMap(world) {
 
 function main(regl, aerosolData, coorData) {
 
-console.log(coorData.length)
+// console.log(coorData.length)
     const numPoints = coorData.length;
     const pointWidth = 4;
     const pointMargin = 1;
     const duration = 2000;
     const delayByIndex = 500 / numPoints;
-    console.log(delayByIndex)
+    // console.log(delayByIndex)
     const maxDuration = duration + delayByIndex * numPoints; // include max delay in here
-    console.log(maxDuration)
+    // console.log(maxDuration)
 
     var weeks = 4;
     var allweeks =[];
     endPoints = numPoints;
     startPoints = 0
     for (var i=0; i < weeks; i++) {
-        console.log('start: ',startPoints)
-        console.log('end: ',endPoints)
+        
         allweeks[i] = aerosolData.slice(startPoints,endPoints)
         startPoints = endPoints
         endPoints = endPoints + numPoints
     }
-    console.log(allweeks)
+    // console.log(allweeks)
     // jan = aerosolData.slice(0,numPoints)
 
     // jan = aerosolData.filter(function(d,i) {
@@ -385,7 +384,7 @@ console.log(coorData.length)
   
     // function to start animation loop (note: time is in seconds)
     function animate(layout, points, coorData) {
-        console.log(points)
+        // console.log(points)
         
         // yearSel.transition().duration(100).text(months[monthCount] + ' 2015')
         d3.select("#week").text(weeks[monthCount] + ' 2015');
@@ -395,7 +394,7 @@ console.log(coorData.length)
         console.log('animating with new layout');
         // make previous end the new beginning
         
-        console.log(points)
+        // console.log(points)
         points.forEach(function(d,i){
             // console.log(coorData[i])
             d.sx = d.tx;
@@ -405,14 +404,14 @@ console.log(coorData.length)
 
         if (monthCount > weeks - 1) monthCount = 0
         // layout points
-        console.log(points)
+        // console.log(points)
         layout(points);
 
         // copy layout x y to end positions
         const colorScale = colorScales[currentColorScale];
 
         if(j==0){
-            console.log(j)
+            // console.log(j)
 
             points.forEach(d => {
                 d.tx = d.x;
@@ -431,7 +430,7 @@ console.log(coorData.length)
                 d.colorEnd = d.color;
             });            
         }
-        console.log(j)
+        // console.log(j)
         j+=1
 
         // points.forEach((d, i) => {
@@ -442,7 +441,7 @@ console.log(coorData.length)
         // });
 
         // create the regl function with the new start and end points
-        console.log(points)
+        // console.log(points)
         const drawPoints = createDrawPoints(points);
 
         // start an animation loop

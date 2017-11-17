@@ -9,9 +9,9 @@ function toVectorColor(colorStr) {
 function colorDataByContinent(data, aerosolData) {
     // var colorScale = d3.scaleOrdinal().domain(["NA", "SA", "EU", "AS", "AF", "OC", "AN"]).range(d3.range(0, 1, 1 / 6).concat(1).map(d3.scaleSequential(d3.interpolateCool)));
     // console.log(d3.min(aerosolData,function(d){return d.aer}))
-    console.log(d3.max(aerosolData, function(d) {
-            return d.aer
-        }))
+    // console.log(d3.max(aerosolData, function(d) {
+    //         return d.aer
+    //     }))
     var colorScale = d3.scaleLinear()
         .domain([0,1, d3.max(aerosolData, function(d) {return d.aer; })/2,
          d3.max(aerosolData, function(d) {return d.aer; })])
@@ -34,17 +34,17 @@ function colorDataByContinent(data, aerosolData) {
 }
 
 function citiesLayout(points, width, height, aerosolData,coorData) {
-    console.log(coorData)
+    // console.log(coorData)
     // debugger;
     function projectData(data,coorData) {
         var latExtent = d3.extent(coorData, function(d) {
             return d.lat
         });
-        console.log('lat:', latExtent)
+        // console.log('lat:', latExtent)
         var lngExtent = d3.extent(coorData, function(d) {
             return d.lng
         });
-        console.log('lng:',lngExtent)
+        // console.log('lng:',lngExtent)
         var extentGeoJson = {
             type: "LineString",
             coordinates: [
@@ -68,7 +68,7 @@ function citiesLayout(points, width, height, aerosolData,coorData) {
         //     d.x = location[0];
         //     d.y = location[1]
         // })
-        console.log(data)
+        // console.log(data)
         var projection = d3.geoMercator()
         // .rotate([126, 0])
         .center([78, 24])
