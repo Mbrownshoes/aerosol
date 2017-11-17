@@ -6,6 +6,7 @@ var test, world, yearSel, monthCount
 var canvas = document.getElementById("canvas");
 // var canvas = d3.select("body").append("canvas")
 // console.log(canvas)
+var j=0
 canvas.width = width;
 canvas.height = height;
 
@@ -371,6 +372,8 @@ function main(regl, aerosolData) {
         // console.log(points)
         console.log('animating with new layout');
         // make previous end the new beginning
+        
+
         points.forEach(d => {
             d.sx = d.tx;
             d.sy = d.ty;
@@ -379,18 +382,41 @@ function main(regl, aerosolData) {
         if (monthCount > months.length - 1) monthCount = 0
         // layout points
         // console.log(points)
+        // debugger
         layout(points);
 
         // copy layout x y to end positions
         const colorScale = colorScales[currentColorScale];
-        points.forEach((d, i) => {
-            d.tx = d.x;
-            d.ty = d.y;
-            // d.colorEnd = colorScale(i / points.length)
-            d.colorEnd = d.color;
-        });
+        if(j==0){
+            console.log(j)
+            points.forEach(d => {
+                d.tx = d.x;
+                d.ty = d.y;
+                d.sx=d.x;
+                d.sy=d.y;
+                d.colorStart = d.color;
+                d.colorEnd= d.color;
+            });            
+        }else{
+            points.forEach((d, i) => {
+                d.tx = d.x;
+                d.ty = d.y;
+                // d.colorEnd = colorScale(i / points.length)
+                d.colorEnd = d.color;
+            });            
+        }
+        console.log(j)
+        j+=1
+
+        // points.forEach((d, i) => {
+        //     d.tx = d.x;
+        //     d.ty = d.y;
+        //     // d.colorEnd = colorScale(i / points.length)
+        //     d.colorEnd = d.color;
+        // });
 
         // create the regl function with the new start and end points
+
         const drawPoints = createDrawPoints(points);
 
         // start an animation loop
@@ -447,7 +473,7 @@ function main(regl, aerosolData) {
                 // 		d.colorEnd = [0, 0, 0];
                 // 	});
                 // }
-
+                // console.log(points)
                 animate(layouts[currentLayout], points);
             }
         });
@@ -464,7 +490,8 @@ function main(regl, aerosolData) {
         d.colorEnd = [0, 0, 0];
     });
 
-    animate(layouts[currentLayout], points);
+
+    animate(layouts[currentLayout],points);
 }
 
 loadData().then(({
