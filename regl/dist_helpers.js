@@ -21,7 +21,7 @@ function colorDataByContinent(data, aerosolData) {
         // }), d3.max(aerosolData, function(d) {
         //     return d.aer
         // })])
-        .range(["white",'#fff7bc','#fec44f','#d95f0e']);
+        .range(["#f2efe9",'#fff7bc','#fec44f','#d95f0e']);
     // var varyLightness = function(color) {
     //     var hsl = d3.hsl(color);
     //     hsl.l *= .1 + Math.random();
