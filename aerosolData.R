@@ -2,12 +2,13 @@ library(raster)
 library(sp)
 library(rgdal)
 library(ggplot2)
-
+library(dplyr)
 x<-read.csv('Data/MODAL2_E_AER_OD_2017-11-01_rgb_3600x1800.CSV')
 
-fileN <- paste0('Data/MODAL2_E_AER_OD_2017-11-01_rgb_3600x1800.TIFF')
+fileN <- paste0('Data/week-41.tiff')
 map <- raster(fileN)
 map
+map[map == 255] <- NA #takes a while
 map@crs
 
 hist(map,main='Distribution of Aerosol values',
@@ -29,6 +30,7 @@ plot(mapcrop1)
 #manually assign coordinates to crop - India
 cropbox2 <- c(60,95,10,39)
 mapcrop2 <- crop(map, cropbox2)
+
 plot(mapcrop2)
 mapcrop2
 
@@ -36,14 +38,26 @@ mapPoints = as.data.frame(rasterToPoints(mapcrop2))
 colnames(mapPoints)[3] <- 'aer'
 write.csv(mapPoints, file=paste0("Data/","nov1",".csv"), row.names=F)
 
+datalist =list()
+j=0
 for(i in 41:44){
+  j=j+1
   fileN <- paste0('Data/week-',i,'.tiff')
   map <- raster(fileN)
-  #manually assign coordinates to crop - India
-  cropbox2 <- c(60,95,10,39)
+  #remove non measurements
+  map[map == 255] <- 0 #takes a while
+  map[is.na(map)] <- 0 
+  
+  #manually assign coordinates to crop - India  
+  cropbox2 <- c(60,95,9,39)
   mapcrop2 <- crop(map, cropbox2)
   mapPoints = as.data.frame(rasterToPoints(mapcrop2))
+  mapPoints <- mutate(mapPoints,week=i)
   colnames(mapPoints)[3] <- 'aer'
-  write.csv(mapPoints, file=paste0("Data/week",i,".csv"), row.names=F)
+  write.csv(mapPoints, file=paste0("regl/week",i,".csv"), row.names=F)
+  datalist[[j]] <- mapPoints
+  
   
 }
+x <- bind_rows(datalist)
+write.csv(x, file=paste0("regl/week41-44",".csv"), row.names=F)
