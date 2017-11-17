@@ -71,9 +71,9 @@ function citiesLayout(points, width, height, aerosolData,coorData) {
         console.log(data)
         var projection = d3.geoMercator()
         // .rotate([126, 0])
-        .center([78, 20])
+        .center([78, 24])
         // .parallels([50, 58.5])
-        .scale(1000)
+        .scale(1200)
         .translate([960 / 2, 600 / 2]);
         // .fitSize([width, height], extentGeoJson);
         

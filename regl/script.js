@@ -35,9 +35,9 @@ function makeMap(world) {
 
     const projection = d3.geoMercator()
         // .rotate([126, 0])
-        .center([78, 20])
+        .center([78, 24])
         // .parallels([50, 58.5])
-        .scale(1000)
+        .scale(1200)
         .translate([960 / 2, 600 / 2]);
         // .fitSize([width, height], land)
         // .translate([-1240, 720]);
@@ -133,7 +133,7 @@ function makeMap(world) {
 
 function main(regl, aerosolData, coorData) {
 
-// console.log(aerosolData.length)
+console.log(coorData.length)
     const numPoints = coorData.length;
     const pointWidth = 4;
     const pointMargin = 1;

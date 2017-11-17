@@ -49,7 +49,8 @@ for(i in 41:44){
   map[is.na(map)] <- 0 
   
   #manually assign coordinates to crop - India  
-  cropbox2 <- c(60,95,9,39)
+  # cropbox2 <- c(60,95,9,39)
+  cropbox2 <- c(60,100,5,39)
   mapcrop2 <- crop(map, cropbox2)
   mapPoints = as.data.frame(rasterToPoints(mapcrop2))
   # mapPoints <- mutate(mapPoints,week=i)
@@ -69,4 +70,4 @@ for(i in 41:44){
   datalist[[j]] <- mapPoints
 }
 x <- bind_rows(datalist)
-write.csv(x, file=paste0("regl/week41-44",".csv"), row.names=F)
+write.csv(x, file=paste0("regl/week-41-44",".csv"), row.names=F)
