@@ -4,6 +4,8 @@ var width = 960;
 var height = 700; 
 var test, world, yearSel, monthCount
 var canvas = document.getElementById("canvas");
+
+var pointLocations;
 // var canvas = d3.select("body").append("canvas")
 // console.log(canvas)
 var j=0
@@ -123,10 +125,10 @@ function makeMap(world) {
 
 }
 
-function main(regl, aerosolData) {
+function main(regl, aerosolData, coorData) {
 
 // console.log(aerosolData.length)
-    const numPoints = 105001-1;
+    const numPoints = coorData.length;
     const pointWidth = 4;
     const pointMargin = 1;
     const duration = 2000;
@@ -135,50 +137,62 @@ function main(regl, aerosolData) {
     const maxDuration = duration + delayByIndex * numPoints; // include max delay in here
     console.log(maxDuration)
 
-    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    var weeks = 4;
+    var allweeks =[];
+    endPoints = numPoints;
+    startPoints = 0
+    for (var i=0; i < weeks; i++) {
+        console.log('start: ',startPoints)
+        console.log('end: ',endPoints)
+        allweeks[i] = aerosolData.slice(startPoints,endPoints)
+        startPoints = endPoints
+        endPoints = endPoints + numPoints
+    }
+    console.log(allweeks)
+    // jan = aerosolData.slice(0,numPoints)
 
-    jan = aerosolData.filter(function(d) {
-        // console.log(d)
-        return d.date == "41"
-    })
-    feb = aerosolData.filter(function(d) {
-        return d.date == "42"
-    })
-    mar = aerosolData.filter(function(d) {
-        return d.date == "43"
-    })
-    apr = aerosolData.filter(function(d) {
-        return d.date == "44"
-    })
-    may = aerosolData.filter(function(d) {
-        return d.date == "1505"
-    })
-    jun = aerosolData.filter(function(d) {
-        return d.date == "1506"
-    })
-    jul = aerosolData.filter(function(d) {
-        return d.date == "1507"
-    })
-    aug = aerosolData.filter(function(d) {
-        return d.date == "1508"
-    })
-    sep = aerosolData.filter(function(d) {
-        return d.date == "1509"
-    })
-    oct = aerosolData.filter(function(d) {
-        return d.date == "1510"
-    })
-    nov = aerosolData.filter(function(d) {
-        return d.date == "1511"
-    })
-    dec = aerosolData.filter(function(d) {
-        return d.date == "1512"
-    })
-
-    const toCities = (points) => citiesLayout(points, width, height, jan);
-    const toCities1 = (points) => citiesLayout(points, width, height, feb);
-    const toCities2 = (points) => citiesLayout(points, width, height, mar);
-    const toCities3 = (points) => citiesLayout(points, width, height, apr);
+    // jan = aerosolData.filter(function(d,i) {
+    //     // console.log(d)
+    //     return d.date == "41"
+    // })
+    // feb = aerosolData.filter(function(d) {
+    //     return d.date == "42"
+    // })
+    // mar = aerosolData.filter(function(d) {
+    //     return d.date == "43"
+    // })
+    // apr = aerosolData.filter(function(d) {
+    //     return d.date == "44"
+    // })
+    // may = aerosolData.filter(function(d) {
+    //     return d.date == "1505"
+    // })
+    // jun = aerosolData.filter(function(d) {
+    //     return d.date == "1506"
+    // })
+    // jul = aerosolData.filter(function(d) {
+    //     return d.date == "1507"
+    // })
+    // aug = aerosolData.filter(function(d) {
+    //     return d.date == "1508"
+    // })
+    // sep = aerosolData.filter(function(d) {
+    //     return d.date == "1509"
+    // })
+    // oct = aerosolData.filter(function(d) {
+    //     return d.date == "1510"
+    // })
+    // nov = aerosolData.filter(function(d) {
+    //     return d.date == "1511"
+    // })
+    // dec = aerosolData.filter(function(d) {
+    //     return d.date == "1512"
+    // })
+// console.log(points)
+    const toCities = (points) => citiesLayout(points, width, height, allweeks[0],coorData);
+    const toCities1 = (points) => citiesLayout(points, width, height, allweeks[1],coorData);
+    const toCities2 = (points) => citiesLayout(points, width, height, allweeks[2],coorData);
+    const toCities3 = (points) => citiesLayout(points, width, height, allweeks[3],coorData);
     const toCities4 = (points) => citiesLayout(points, width, height, may);
     const toCities5 = (points) => citiesLayout(points, width, height, jun);
     const toCities6 = (points) => citiesLayout(points, width, height, jul);
@@ -364,32 +378,36 @@ function main(regl, aerosolData) {
         //Render loop
   
     // function to start animation loop (note: time is in seconds)
-    function animate(layout, points) {
-
+    function animate(layout, points, coorData) {
+        console.log(points)
+        
         // yearSel.transition().duration(100).text(months[monthCount] + ' 2015')
-        d3.select("#week").text(months[monthCount] + ' 2015');
+        d3.select("#week").text(weeks[monthCount] + ' 2015');
 
         monthCount++
         // console.log(points)
         console.log('animating with new layout');
         // make previous end the new beginning
         
-
-        points.forEach(d => {
+        console.log(points)
+        points.forEach(function(d,i){
+            // console.log(coorData[i])
             d.sx = d.tx;
             d.sy = d.ty;
             d.colorStart = d.colorEnd;
         });
-        if (monthCount > months.length - 1) monthCount = 0
+
+        if (monthCount > weeks - 1) monthCount = 0
         // layout points
-        // console.log(points)
-        // debugger
+        console.log(points)
         layout(points);
 
         // copy layout x y to end positions
         const colorScale = colorScales[currentColorScale];
+
         if(j==0){
             console.log(j)
+
             points.forEach(d => {
                 d.tx = d.x;
                 d.ty = d.y;
@@ -397,7 +415,8 @@ function main(regl, aerosolData) {
                 d.sy=d.y;
                 d.colorStart = d.color;
                 d.colorEnd= d.color;
-            });            
+            });
+
         }else{
             points.forEach((d, i) => {
                 d.tx = d.x;
@@ -417,7 +436,7 @@ function main(regl, aerosolData) {
         // });
 
         // create the regl function with the new start and end points
-
+        console.log(points)
         const drawPoints = createDrawPoints(points);
 
         // start an animation loop
@@ -478,7 +497,7 @@ function main(regl, aerosolData) {
                 // 	});
                 // }
                 // console.log(points)
-                animate(layouts[currentLayout], points);
+                animate(layouts[currentLayout], points,coorData);
             }
         });
     }
@@ -489,25 +508,36 @@ function main(regl, aerosolData) {
     const points = d3.range(numPoints).map(d => ({}));
 
     points.forEach((d, i) => {
+        // console.log(width)
         d.tx = width / 2;
         d.ty = height / 2;
         d.colorEnd = [0, 0, 0];
     });
 
-
-    animate(layouts[currentLayout],points);
+    animate(layouts[currentLayout],points,coorData);
 }
 
-loadData().then(({
-    aerosolData
-}) => {
-    console.log(d3.map(aerosolData, function(d) {
-        return d.date;
-    }).keys())
-    console.log('data has loaded. initializing regl...');
+function loadData() {
 
-    // initialize regl
-    regl({
+    d3.queue()
+        .defer(d3.csv, "week-41-44.csv")
+        .defer(d3.csv, "coordinates.csv")
+        .await(dostuff);
+
+    function dostuff(error,aerosolData,coorData){
+        
+        aerosolData.forEach(function(d){
+            d.aer= +d.aer
+        })
+
+        coorData.forEach(function(d){
+            d.lat = +d.y,
+            d.lng = +d.x
+        })
+
+        // pointLocations = coorData.map(function(d){})
+        console.log('data has loaded. initializing regl...');
+            regl({
         canvas: canvas,
         // callback when regl is initialized
         onDone: (err, regl) => {
@@ -515,7 +545,68 @@ loadData().then(({
                 console.error('Error initializing regl', err);
                 return;
             }
-            main(regl, aerosolData);
+            main(regl, aerosolData, coorData);
         },
     });
-});
+    }
+
+    // return new Promise(function(resolve, reject) {
+    //     var aerosolCsv = function() {
+    //         var args = [],
+    //             len = arguments.length;
+    //         while (len--) args[len] = arguments[len];
+    //         console.log(args)
+    //         return d3.csv(args[0], function(d) {
+    //             return {
+    //                 continent: +d.aer,
+    //                 lat: +d.y,
+    //                 lng: +d.x,
+    //                 date: d.week
+    //             }
+    //         }, args[1])
+    //     };
+    //     // var coordsRaw = args[1]
+        
+    //         .await(function(err, aerosolData,coordsRaw) {
+    //             console.log(coordsRaw)
+    //             // var times = _.uniq(_.flatten(aerosolData.map(d => d3.keys(d.date)))).sort()
+                
+    //             if (err) {
+    //                 console.error("Something went wrong loading data", err);
+    //                 reject(err);
+    //                 return
+    //             }
+    //             resolve({
+    //                 aerosolData: aerosolData,
+    //                 coordsRaw: coordsRaw
+
+    //                 // aerosolData1: aerosolData1
+    //                 // imgData: processImageData(imgData, width, height)
+    //             })
+    //         })
+    // })
+
+    
+}
+loadData()
+//     .then(({
+//     aerosolData
+// }) => {
+//     console.log(d3.map(aerosolData, function(d) {
+//         return d.date;
+//     }).keys())
+//     console.log('data has loaded. initializing regl...');
+
+//     // initialize regl
+//     regl({
+//         canvas: canvas,
+//         // callback when regl is initialized
+//         onDone: (err, regl) => {
+//             if (err) {
+//                 console.error('Error initializing regl', err);
+//                 return;
+//             }
+//             main(regl, aerosolData);
+//         },
+//     });
+// });
