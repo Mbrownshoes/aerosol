@@ -361,7 +361,8 @@ function main(regl, aerosolData) {
 
         return drawPoints;
     }
-
+        //Render loop
+  
     // function to start animation loop (note: time is in seconds)
     function animate(layout, points) {
 
@@ -431,6 +432,8 @@ function main(regl, aerosolData) {
                 startTime = time;
             }
 
+            
+
             // clear the buffer
             // regl.clear({
             // 	// background color (black)
@@ -455,9 +458,10 @@ function main(regl, aerosolData) {
 
             // if we have exceeded the maximum duration, move on to the next animation
             // console.log(maxDuration / 1000)
-            // console.log(time - startTime)
-            if (time - startTime > (2.3)) {
+     
+            if (time - startTime > (2)) {
                 // console.log(time)
+            // if (Math.round(frame) == 0){
                 console.log('done animating, moving to next layout');
                 // debugger;
 
