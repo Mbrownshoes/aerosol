@@ -21,20 +21,26 @@ d3.selection.prototype.moveToFront = function() {
 
 
 // var world
-d3.loadData(["world.json"], function(err, res) {
+d3.loadData(["asiaTopo.json"], function(err, res) {
     console.log(res[0])
     world = res[0]
     // count ++
     // console.log(count)
-    // makeMap(res[0])
+    makeMap(res[0])
 })
 
 function makeMap(world) {
-    var land = topojson.mesh(world, world.objects.land);
+    console.log(world.objects)
+    var land = topojson.mesh(world, world.objects.asia);
 
     const projection = d3.geoMercator()
-        .fitSize([width, height], land)
-        .translate([-1240, 720]);
+        // .rotate([126, 0])
+        .center([78, 20])
+        // .parallels([50, 58.5])
+        .scale(1000)
+        .translate([960 / 2, 600 / 2]);
+        // .fitSize([width, height], land)
+        // .translate([-1240, 720]);
     // .rotate([-180, 0])
     // .precision(0.1);
 
@@ -47,7 +53,7 @@ function makeMap(world) {
     var path = d3.geoPath()
         .projection(projection);
 
-    var pathStr = path(topojson.feature(world, world.objects.land));
+    var pathStr = path(topojson.feature(world, world.objects.asia));
 
 
     var mask = svg.append('mask')
@@ -64,7 +70,7 @@ function makeMap(world) {
 
     svg.append('rect')
         .attr("mask", "url(#ocean)")
-        .style("fill", '#f7fbff')
+        .style("fill", '#a9d2df')
         .attr("width", width)
         .attr("height", height)
 
@@ -106,19 +112,19 @@ function makeMap(world) {
         // svg.select(".legendLinear")
         //     .call(legendLinear);
       
-        var legendScale = d3.scaleOrdinal()
-            .domain(['Carbon uptake', 'Carbon release'])
-            .range(['record', 'avg'])
+        // var legendScale = d3.scaleOrdinal()
+        //     .domain(['Carbon uptake', 'Carbon release'])
+        //     .range(['record', 'avg'])
 
         //d3-legend
-        var legend = d3.legendColor()
-            .shapePadding(5)
-            .useClass(true)
-            .scale(legendScale);
+        // var legend = d3.legendColor()
+        //     .shapePadding(5)
+        //     .useClass(true)
+        //     .scale(legendScale);
 
-        svg.append('g')
-            .attr('transform', 'translate(30,400)')
-            .call(legend);
+        // svg.append('g')
+        //     .attr('transform', 'translate(30,400)')
+        //     .call(legend);
 
 
     monthCount = 0

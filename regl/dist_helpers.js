@@ -69,7 +69,13 @@ function citiesLayout(points, width, height, aerosolData,coorData) {
         //     d.y = location[1]
         // })
         console.log(data)
-        var projection = d3.geoMercator().fitSize([width, height], extentGeoJson);
+        var projection = d3.geoMercator()
+        // .rotate([126, 0])
+        .center([78, 20])
+        // .parallels([50, 58.5])
+        .scale(1000)
+        .translate([960 / 2, 600 / 2]);
+        // .fitSize([width, height], extentGeoJson);
         
         data.forEach(function(d, i) {
             // console.log(coorData[i])
